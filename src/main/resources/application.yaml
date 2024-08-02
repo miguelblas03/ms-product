@@ -14,4 +14,4 @@ spring:
 
 server:
   servlet:
-    contextPath: /ms-project-v1
+    contextPath: /ms-project
