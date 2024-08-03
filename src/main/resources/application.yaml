@@ -12,6 +12,11 @@ spring:
   application:
     name: ms-project
 
+  security:
+    user:
+      name: ${USERNAME}
+      password: ${USER_PASSWORD}
+
 server:
   servlet:
     contextPath: /ms-project
