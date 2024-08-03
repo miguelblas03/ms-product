@@ -20,6 +20,10 @@ Crear la base de datos en mysql server con el nombre `db_project`
   - `root`
 - **`DB_PASSWORD`**: La contraseña del usuario para acceder la base de datos.
   - `rootroot`
+- **`USERNAME`**: El usuario que se usara para la autenticación.
+  - `user`
+- **`USER_PASSWORD`**: La contraseña del usuario que tendra autorización.
+  - `pass`
 
 ### Pruebas
 
