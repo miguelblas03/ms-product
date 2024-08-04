@@ -3,15 +3,14 @@ package com.company.msproject.utils;
 import com.company.msproject.exception.ConvertValueRuntimeException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class EntityUtils {
 
     private EntityUtils() {}
 
     private static final ObjectMapper objectMapper;
-    private static final Logger log = LoggerFactory.getLogger(EntityUtils.class);
 
     static {
         objectMapper = new ObjectMapper();

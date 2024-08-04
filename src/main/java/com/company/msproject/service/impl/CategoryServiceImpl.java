@@ -2,7 +2,7 @@ package com.company.msproject.service.impl;
 
 import com.company.msproject.entity.Category;
 import com.company.msproject.enums.StatusEnum;
-import com.company.msproject.exception.NotFoundException;
+import com.company.msproject.exception.CategoryNotFoundException;
 import com.company.msproject.repository.CategoryRepository;
 import com.company.msproject.service.CategoryService;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +15,6 @@ import org.springframework.stereotype.Service;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
-
-    private static final String CATEGORY_NOT_FOUND_MESSAGE = "Category not found";
 
     @Override
     public Page<Category> getAll(int pageNumber, int pageSize) {
@@ -31,22 +29,22 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category getById(Long id) throws NotFoundException {
-        return categoryRepository.findById(id).orElseThrow(() -> new NotFoundException(CATEGORY_NOT_FOUND_MESSAGE));
+    public Category getById(Long id) throws CategoryNotFoundException {
+        return categoryRepository.findById(id).orElseThrow(CategoryNotFoundException::new);
     }
 
     @Override
-    public Category update(Long id, Category category) throws NotFoundException {
+    public Category update(Long id, Category category) throws CategoryNotFoundException {
         if (!categoryRepository.existsById(id)) {
-            throw new NotFoundException(CATEGORY_NOT_FOUND_MESSAGE);
+            throw new CategoryNotFoundException();
         }
         category.setId(id);
         return categoryRepository.save(category);
     }
 
     @Override
-    public void deleteById(Long id) throws NotFoundException {
-        Category category = categoryRepository.findById(id).orElseThrow(() -> new NotFoundException(CATEGORY_NOT_FOUND_MESSAGE));
+    public void deleteById(Long id) throws CategoryNotFoundException {
+        Category category = categoryRepository.findById(id).orElseThrow(CategoryNotFoundException::new);
         category.setStatus(StatusEnum.INACTIVE);
         categoryRepository.save(category);
     }
