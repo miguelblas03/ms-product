@@ -6,7 +6,7 @@ Microservicio para administración de productos
 
 Para ejecutar la aplicación localmente, se necesita crear la bd y configurar variables de entorno, las tablas se crearán automáticamente al ejecutar la aplicación
 
-### Pre requisitos
+### Prerrequisitos
 
 Crear la base de datos en mysql server con el nombre `db_project`
 
@@ -22,7 +22,7 @@ Crear la base de datos en mysql server con el nombre `db_project`
   - `rootroot`
 - **`USERNAME`**: El usuario que se usara para la autenticación.
   - `user`
-- **`USER_PASSWORD`**: La contraseña del usuario que tendra autorización.
+- **`USER_PASSWORD`**: La contraseña del usuario que tendrá autorización.
   - `pass`
 - **`BOOTSTRAP_SERVERS`**: Servidor donde se encuentra el topico.
   - `Se proporciona el dato por interno`
@@ -33,9 +33,9 @@ Crear la base de datos en mysql server con el nombre `db_project`
 
 ### Configuracion para descargar dependencias
 
-Para poder producir y consumir eventos se creo una libreria con los datos del evento en comun que luego sera usado desde el consumidor.
+Para poder producir y consumir eventos se creo una biblioteca con los datos del evento en común que luego sera usado desde el consumidor.
 
-Agregar la siguiente configuracion en `settings.xml`:
+Agregar la siguiente configuración en `settings.xml`:
 
 ```
 <servers>
@@ -47,18 +47,18 @@ Agregar la siguiente configuracion en `settings.xml`:
 </servers>
 ```
 
-Nota: reemplaxar `${token}` por el dato proporcionado
+Nota: reemplazar `${token}` por el dato proporcionado
 
-La libreria se encuentra en: `https://github.com/miguelblas03/common-event-lib`
+La biblioteca se encuentra en: `https://github.com/miguelblas03/common-event-lib`
 
 ### Pruebas
 
 Utilizar el postman adjunto
 
-Nota: Crear una categoria para poder crear productos
+Nota: Crear una categoría para poder crear productos
 
 ### Servicio externo
 
-Para realizar la actualizacion de las estadisticas de manera asincrona, se creo un servicio consumidor del evento:
+Para realizar la actualización de las estadísticas de manera asíncrona, se creo un servicio consumidor del evento:
 
 El servicio se encuentra en: `https://github.com/miguelblas03/async-statistic`
