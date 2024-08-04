@@ -7,10 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ProductResponseDto {
+public class StatisticResponseDto {
     private Long id;
-    private String name;
-    private String description;
-    private String status;
     private CategoryResponseDto category;
+    private Long totalProducts;
+    private String description;
 }
