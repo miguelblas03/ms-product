@@ -2,7 +2,7 @@ package com.company.msproject.service;
 
 import com.company.msproject.entity.Category;
 import com.company.msproject.enums.StatusEnum;
-import com.company.msproject.exception.NotFoundException;
+import com.company.msproject.exception.CategoryNotFoundException;
 import com.company.msproject.repository.CategoryRepository;
 import com.company.msproject.service.impl.CategoryServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,11 +18,12 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class CategoryServiceImplTest {
 
-    private final CategoryRepository categoryRepository = Mockito.mock(CategoryRepository.class);
+    private final CategoryRepository categoryRepository = mock(CategoryRepository.class);
 
     private final CategoryServiceImpl categoryService = new CategoryServiceImpl(categoryRepository);
 
@@ -54,7 +55,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
-    void getById_ok() throws NotFoundException {
+    void getById_ok() throws CategoryNotFoundException {
         when(categoryRepository.findById(any(Long.class))).thenReturn(Optional.of(category));
         var categoryDb = categoryService.getById(1L);
 
@@ -64,11 +65,11 @@ class CategoryServiceImplTest {
     @Test
     void getById_fail_category_not_found() {
         when(categoryRepository.findById(any(Long.class))).thenReturn(Optional.empty());
-        assertThrows(NotFoundException.class, () -> categoryService.getById(1L));
+        assertThrows(CategoryNotFoundException.class, () -> categoryService.getById(1L));
     }
 
     @Test
-    void update_ok() throws NotFoundException {
+    void update_ok() throws CategoryNotFoundException {
         when(categoryRepository.existsById(any(Long.class))).thenReturn(true);
         when(categoryRepository.save(any(Category.class))).thenReturn(category);
         var newCategory = categoryService.update(1L, category);
@@ -79,11 +80,11 @@ class CategoryServiceImplTest {
     @Test
     void update_fail_category_not_found() {
         when(categoryRepository.findById(any(Long.class))).thenReturn(Optional.empty());
-        assertThrows(NotFoundException.class, () -> categoryService.update(1L, category));
+        assertThrows(CategoryNotFoundException.class, () -> categoryService.update(1L, category));
     }
 
     @Test
-    void deleteById_ok() throws NotFoundException {
+    void deleteById_ok() throws CategoryNotFoundException {
         when(categoryRepository.findById(any(Long.class))).thenReturn(Optional.of(category));
         categoryService.deleteById(1L);
 
@@ -93,6 +94,6 @@ class CategoryServiceImplTest {
     @Test
     void deleteById_fail_category_not_found() {
         when(categoryRepository.findById(any(Long.class))).thenReturn(Optional.empty());
-        assertThrows(NotFoundException.class, () -> categoryService.deleteById(1L));
+        assertThrows(CategoryNotFoundException.class, () -> categoryService.deleteById(1L));
     }
 }

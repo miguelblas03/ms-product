@@ -1,12 +1,14 @@
 package com.company.msproject.controller;
 
-import com.company.msproject.dto.ProductRequestDto;
+import com.company.msproject.dto.ProductCreateRequestDto;
+import com.company.msproject.dto.ProductUpdateRequestDto;
 import com.company.msproject.dto.ProductResponseDto;
 import com.company.msproject.dto.ProductStatusRequestDto;
 import com.company.msproject.entity.Category;
 import com.company.msproject.entity.Product;
 import com.company.msproject.enums.StatusEnum;
-import com.company.msproject.exception.NotFoundException;
+import com.company.msproject.exception.CategoryNotFoundException;
+import com.company.msproject.exception.ProductNotFoundException;
 import com.company.msproject.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +31,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ProductResponseDto getProductById(@PathVariable Long id) throws NotFoundException {
+    public ProductResponseDto getProductById(@PathVariable Long id) throws ProductNotFoundException {
         return convertValue(productService.getById(id), ProductResponseDto.class);
     }
 
@@ -40,32 +42,32 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductResponseDto createProduct(@Valid @RequestBody ProductRequestDto productRequestDto) throws NotFoundException {
-        Product newProduct = buildProductWithCategory(productRequestDto);
+    public ProductResponseDto createProduct(@Valid @RequestBody ProductCreateRequestDto productCreateRequestDto) throws CategoryNotFoundException {
+        Product newProduct = convertValue(productCreateRequestDto, Product.class);
+        addCategoryToProduct(newProduct, productCreateRequestDto.getCategoryId());
         return convertValue(productService.create(newProduct), ProductResponseDto.class);
     }
 
     @PutMapping("/{id}")
-    public ProductResponseDto updateProduct(@PathVariable Long id, @Valid @RequestBody ProductRequestDto productRequestDto) throws NotFoundException {
-        Product newProduct = buildProductWithCategory(productRequestDto);
+    public ProductResponseDto updateProduct(@PathVariable Long id, @Valid @RequestBody ProductUpdateRequestDto productUpdateRequestDto) throws ProductNotFoundException, CategoryNotFoundException {
+        Product newProduct = convertValue(productUpdateRequestDto, Product.class);
+        addCategoryToProduct(newProduct, productUpdateRequestDto.getCategoryId());
         return convertValue(productService.update(id, newProduct), ProductResponseDto.class);
     }
 
     @PatchMapping("/{id}")
-    public ProductResponseDto updateProductStatus(@PathVariable Long id, @Valid @RequestBody ProductStatusRequestDto productStatusRequestDto) throws NotFoundException {
+    public ProductResponseDto updateProductStatus(@PathVariable Long id, @Valid @RequestBody ProductStatusRequestDto productStatusRequestDto) throws ProductNotFoundException {
         return convertValue(productService.updateStatus(id, StatusEnum.valueOf(productStatusRequestDto.getStatus())), ProductResponseDto.class);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteProduct(@PathVariable Long id) {
+    public void deleteProduct(@PathVariable Long id) throws ProductNotFoundException {
         productService.deleteById(id);
     }
 
-    private Product buildProductWithCategory(ProductRequestDto productRequestDto) {
-        Product newProduct = convertValue(productRequestDto, Product.class);
+    private void addCategoryToProduct(Product product, Long categoryId) {
         Category category = new Category();
-        category.setId(productRequestDto.getCategoryId());
-        newProduct.setCategory(category);
-        return newProduct;
+        category.setId(categoryId);
+        product.setCategory(category);
     }
 }

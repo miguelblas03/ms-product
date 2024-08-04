@@ -17,6 +17,29 @@ spring:
       name: ${USERNAME}
       password: ${USER_PASSWORD}
 
+  kafka:
+    bootstrap-servers: pkc-12576z.us-west2.gcp.confluent.cloud:9092
+    topic:
+      transfer-bcp: cloud-update-statistics
+
+    properties:
+      ssl.endpoint.identification.algorithm: https
+      sasl.mechanism: PLAIN
+      request.timeout.ms: 3000
+      security.protocol: SASL_SSL
+      retry.backoff.ms: 500
+      retries: 3
+      sasl.jaas.config: org.apache.kafka.common.security.plain.PlainLoginModule required username='RFGZR73WZNZIJSWC' password='ZQmuSzW2lQ4WqcUGv7IGrrd7TeNdtvC8LhNWlwEDlLn9gtxySrLj67s5TFYKW+a9';
+      max.block.ms: 5000
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        acks: all
+        retries: 10000000
+        max.in.flight.requests.per.connection: 1
+        enable.idempotence: true
+
 server:
   servlet:
     contextPath: /ms-project

@@ -3,7 +3,8 @@ package com.company.msproject.controller;
 import com.company.msproject.dto.CategoryRequestDto;
 import com.company.msproject.dto.CategoryResponseDto;
 import com.company.msproject.entity.Category;
-import com.company.msproject.exception.NotFoundException;
+import com.company.msproject.exception.CategoryNotFoundException;
+import com.company.msproject.exception.ProductNotFoundException;
 import com.company.msproject.service.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public CategoryResponseDto getCategoryById(@PathVariable Long id) throws NotFoundException {
+    public CategoryResponseDto getCategoryById(@PathVariable Long id) throws CategoryNotFoundException {
         return convertValue(categoryService.getById(id), CategoryResponseDto.class);
     }
 
@@ -38,14 +39,14 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public CategoryResponseDto updateCategory(@PathVariable Long id, @Valid @RequestBody CategoryRequestDto categoryRequestDto) throws NotFoundException {
+    public CategoryResponseDto updateCategory(@PathVariable Long id, @Valid @RequestBody CategoryRequestDto categoryRequestDto) throws CategoryNotFoundException {
         Category newCategory = convertValue(categoryRequestDto, Category.class);
         return convertValue(categoryService.update(id, newCategory), CategoryResponseDto.class);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCategory(@PathVariable Long id) throws NotFoundException {
+    public void deleteCategory(@PathVariable Long id) throws CategoryNotFoundException {
         categoryService.deleteById(id);
     }
 }

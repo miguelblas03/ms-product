@@ -2,8 +2,7 @@ package com.company.msproject.exception;
 
 import com.company.msproject.dto.ExceptionResponseDto;
 import com.company.msproject.utils.MessageSourceUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,16 +12,22 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @RestControllerAdvice
 public class ResponseExceptionHandler {
 
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler({ ProductNotFoundException.class })
+    public final ExceptionResponseDto handleProductNotFoundException(ProductNotFoundException exception) {
+        log.error("handleProductNotFoundException: {}", exception.getMessage());
+        return MessageSourceUtils.getValue("msg.error.product.not.found", null);
+    }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler({ NotFoundException.class })
-    public final ExceptionResponseDto handleNotFoundException(NotFoundException exception) {
-        log.error("handleNotFoundException: {}", exception.getMessage());
-        return MessageSourceUtils.getValue("msg.error.not.found", null);
+    @ExceptionHandler({ CategoryNotFoundException.class })
+    public final ExceptionResponseDto handleCategoryNotFoundException(CategoryNotFoundException exception) {
+        log.error("handleCategoryNotFoundException: {}", exception.getMessage());
+        return MessageSourceUtils.getValue("msg.error.category.not.found", null);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

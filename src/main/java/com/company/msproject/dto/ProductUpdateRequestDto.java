@@ -15,7 +15,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ProductRequestDto {
+public class ProductUpdateRequestDto {
 
     @NotBlank
     @Size(min = 3, max = 250)
