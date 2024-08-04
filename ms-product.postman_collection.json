@@ -253,7 +253,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"Iphone\",\n    \"categoryId\": 1,\n    \"status\": \"ACTIVE\"\n}",
+					"raw": "{\n    \"name\": \"Iphone 15\",\n    \"description\": \"New product\",\n    \"categoryId\": 1\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -298,7 +298,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"name\": \"Iphone 15\",\n    \"categoryId\": 1,\n    \"description\": \"Iphone 15\",\n    \"status\": \"ACTIVE\"\n}",
+					"raw": "{\n    \"name\": \"Iphone 15\",\n    \"categoryId\": 3,\n    \"description\": \"Iphone 15\",\n    \"status\": \"ACTIVE\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -306,7 +306,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/ms-project/v1/products/1",
+					"raw": "http://localhost:8080/ms-project/v1/products/23",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -316,7 +316,7 @@
 						"ms-project",
 						"v1",
 						"products",
-						"1"
+						"23"
 					]
 				}
 			},
@@ -387,6 +387,43 @@
 					]
 				},
 				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/ms-project/v1/products/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"ms-project",
+						"v1",
+						"products",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteProduct",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "user",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "pass",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
 				"header": [],
 				"url": {
 					"raw": "http://localhost:8080/ms-project/v1/products/1",
