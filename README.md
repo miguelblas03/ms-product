@@ -62,3 +62,5 @@ Nota: Crear una categoría para poder crear productos
 Para realizar la actualización de las estadísticas de manera asíncrona, se creo un servicio consumidor del evento:
 
 El servicio se encuentra en: `https://github.com/miguelblas03/async-statistic`
+
+### **Nota: Para que las estadisticas se actualicen de manera correcta, se requiere que el servicio asincrono se encuentre funcionando**
