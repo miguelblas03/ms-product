@@ -1,7 +1,13 @@
 FROM maven:3.8.4-openjdk-17 AS build
 WORKDIR /app
 
+ARG GITHUB_USERNAME
+ARG GITHUB_TOKEN
+
 COPY settings.xml /root/.m2/settings.xml
+
+RUN sed -i 's|${env.GITHUB_USERNAME}|'${GITHUB_USERNAME}'|g' /root/.m2/settings.xml && \
+    sed -i 's|${env.GITHUB_TOKEN}|'${GITHUB_TOKEN}'|g' /root/.m2/settings.xml
 
 COPY pom.xml .
 RUN mvn dependency:go-offline -B
