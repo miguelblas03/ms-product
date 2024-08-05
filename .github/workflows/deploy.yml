@@ -5,7 +5,7 @@ on:
   pull_request:
     branches: [ "develop" ]
 env:
-  IMAGE_REPO_NAME: projects
+  IMAGE_REPO_NAME: ms-project
   AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
   AWS_REGION: ${{ secrets.AWS_REGION }}
 
