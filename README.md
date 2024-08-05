@@ -69,24 +69,24 @@ El servicio se encuentra en: `https://github.com/miguelblas03/async-statistic`
 La configuracion de Github actions y el uso de variables de entorno esta funcionando. 
 Se guardar en AWS ECR y se realiza el despliegue en AWS ECS. Sin embargo, los microservicios no se pudieron desplegar por problemas de configuracion con la facturacion que pide AWS
 
-AWS ECR
+**AWS ECR**
 <img width="1838" alt="image" src="https://github.com/user-attachments/assets/58104f7e-b2f0-4301-886a-ca7ebcedf305">
 
-AWS ECS
+**AWS ECS**
 <img width="1186" alt="image" src="https://github.com/user-attachments/assets/c8743d3c-ee79-417f-8422-241a28238ad6">
 
-## Para tener una instancia cloud de los contenedores, se realizo un despliegue de ambos microservicios mencionados previamente (**ms-product** y **async-statistic**) en Render:
+### Para tener una instancia cloud de los contenedores, se realizo un despliegue de ambos microservicios mencionados previamente (**ms-product** y **async-statistic**) en Render:
 
 `https://ms-product-n6ru.onrender.com`
 `https://async-statistic.onrender.com`
 
-# RENDER
+### RENDER
 <img width="1549" alt="image" src="https://github.com/user-attachments/assets/15b8f882-6174-4574-810d-4498d37c488c">
 
-# **Pruebas al ms desplegado
+### Pruebas al ms desplegado
 <img width="1313" alt="image" src="https://github.com/user-attachments/assets/e07b84bb-cefc-4d82-a0aa-e8856fe2bcb7">
 
-# **Eventos producidos desde ms-product
+### Eventos producidos desde ms-product
 <img width="1433" alt="image" src="https://github.com/user-attachments/assets/e4e5120c-b7a6-4b9e-8a63-a44e5f69aa1b">
 
 
