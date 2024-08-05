@@ -1,6 +1,20 @@
 FROM maven:3.8.4-openjdk-17 AS build
 WORKDIR /app
 
+RUN mkdir -p /root/.m2
+RUN echo "<settings> \
+             <servers> \
+               <server> \
+                 <id>github</id> \
+                 <username>${GITHUB_USERNAME}</username> \
+                 <password>${GITHUB_TOKEN}</password> \
+               </server> \
+             </servers> \
+             <activeProfiles> \
+               <activeProfile>github</activeProfile> \
+             </activeProfiles> \
+          </settings>" > /root/.m2/settings.xml
+
 COPY pom.xml .
 RUN mvn dependency:go-offline -B
 
