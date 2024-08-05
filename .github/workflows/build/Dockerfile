@@ -1,17 +1,9 @@
-FROM maven:3.8.4-openjdk-17 AS build
-WORKDIR /app
-
-COPY ../../pom.xml .
-RUN mvn dependency:go-offline -B
-
-COPY ../../src ./src
-RUN mvn clean package -DskipTests
-
-FROM openjdk:17-jdk-slim
-WORKDIR /app
-
-COPY --from=build /app/target/*.jar app.jar
-
+ARG image_repo_name
+FROM alpine:latest
+RUN apk add --no-cache tzdata
+RUN apk update && apk add fontconfig && apk add curl && apk add net-tools && apk add openjdk17 && apk upgrade --available
+RUN mkdir /
+COPY *.jar /${image_repo_name}.jar
 EXPOSE 8080
-
-ENTRYPOINT ["java", "-jar", "app.jar"]
+WORKDIR /
+CMD java -jar ${image_repo_name}.jar
