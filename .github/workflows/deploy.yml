@@ -69,3 +69,22 @@ jobs:
           docker-compose -f docker-compose-build.yaml build --no-cache
           docker tag ${IMAGE_REPO_NAME}:latest ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:$IMAGE_TAG
           docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:$IMAGE_TAG
+  deploy:
+    needs: build
+    if: success()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Update ECS Service
+        run: |
+          aws ecs update-service \
+            --cluster DevCluster \
+            --service ms-project \
+            --force-new-deployment \
+            --region ${{ env.AWS_REGION }}
