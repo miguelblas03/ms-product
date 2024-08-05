@@ -1,0 +1,90 @@
+name: Continous Deployment
+on:
+  push:
+    branches: [ "feature/*", "develop" ]
+  pull_request:
+    branches: [ "develop" ]
+env:
+  IMAGE_REPO_NAME: ms-project
+  AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up JDK 17 and Cache Maven
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+          cache-dependency-path: '**/pom.xml'
+      - name: Set up Maven settings
+        run: |
+          mkdir -p ~/.m2
+          echo "<settings>
+                  <servers>
+                    <server>
+                      <id>github</id>
+                      <username>${{ secrets.GH_USERNAME }}</username>
+                      <password>${{ secrets.GH_TOKEN }}</password>
+                    </server>
+                  </servers>
+          
+                  <activeProfiles>
+                    <activeProfile>github</activeProfile>
+                  </activeProfiles>
+                </settings>" > ~/.m2/settings.xml
+
+      - name: Build with Maven
+        run: mvn clean package -DskipTests
+
+      - name: Install Docker Compose
+        run: |
+          sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build, tag, and push docker image to Amazon ECR
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: ${IMAGE_REPO_NAME}
+          IMAGE_TAG: ${{ github.run_id }}
+        run: |
+          cp -f target/*.jar .github/workflows/build/
+          cd .github/workflows/build/
+          docker-compose -f docker-compose-build.yaml build --no-cache
+          docker tag ${IMAGE_REPO_NAME}:latest ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:$IMAGE_TAG
+          docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:$IMAGE_TAG
+  deploy:
+    needs: build
+    if: success()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Update ECS Service
+        run: |
+          aws ecs update-service \
+            --cluster DevCluster \
+            --service ms-project \
+            --force-new-deployment \
+            --region ${{ env.AWS_REGION }}
